@@ -1,0 +1,22 @@
+# ==========================================================
+# AEGIS Environment Configuration
+# Company: Honeydewnuts Nigerian Limited
+# ==========================================================
+
+APP_NAME=AEGIS
+
+APP_VERSION=0.1.0
+
+APP_ENV=development
+
+DEBUG=True
+
+HOST=0.0.0.0
+
+PORT=8000
+
+SECRET_KEY=CHANGE_THIS_TO_A_RANDOM_SECRET_KEY
+
+DATABASE_URL=postgresql://postgres:postgres@postgres:5432/aegis
+
+REDIS_URL=redis://redis:6379/0
