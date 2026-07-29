@@ -1,4 +1,14 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+"""
+Project: AEGIS
+Company: Honeydewnuts Nigerian Limited
+
+Upload API
+"""
+
+from fastapi import APIRouter
+from fastapi import UploadFile
+from fastapi import File
+from fastapi import HTTPException
 
 from app.services.upload_service import UploadService
 
@@ -10,15 +20,27 @@ router = APIRouter(
 service = UploadService()
 
 
-@router.post("/")
-async def upload_image(file: UploadFile = File(...)):
+@router.post("/", response_model=None)
+async def upload_image(
+    file: UploadFile = File(...)
+):
 
     if not file.content_type.startswith("image/"):
+
         raise HTTPException(
             status_code=400,
-            detail="Only image files are allowed."
+            detail="Only image files are accepted."
         )
 
-    result = await service.save_image(file)
+    try:
 
-    return result
+        metadata = await service.save_image(file)
+
+        return metadata.model_dump()
+
+    except ValueError as ex:
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(ex)
+        )
