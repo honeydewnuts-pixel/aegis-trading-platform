@@ -1,23 +1,46 @@
+"""
+AEGIS Main API Router
+
+Autonomous Enterprise Global Intelligence System
+Company: Honeydewnuts Nigerian Limited
+"""
+
 from fastapi import APIRouter
+
+from app.api.upload_router import router as upload_router
 
 router = APIRouter()
 
+# ------------------------------------------------------------------
+# Root API Endpoint
+# ------------------------------------------------------------------
 
 @router.get("/")
-async def root():
+async def api_root():
     return {
         "application": "AEGIS",
-        "status": "Running",
+        "description": "Autonomous Enterprise Global Intelligence System",
+        "company": "Honeydewnuts Nigerian Limited",
         "version": "0.1.0",
-        "company": "Honeydewnuts Nigerian Limited"
+        "status": "Running"
     }
 
+
+# ------------------------------------------------------------------
+# Health Check
+# ------------------------------------------------------------------
 
 @router.get("/health")
 async def health():
     return {
-        "status": "healthy"
+        "status": "healthy",
+        "service": "AEGIS Backend",
+        "version": "0.1.0"
     }
 
 
-from app.api.upload_router import router as upload_router
+# ------------------------------------------------------------------
+# Image Upload API
+# ------------------------------------------------------------------
+
+router.include_router(upload_router)
