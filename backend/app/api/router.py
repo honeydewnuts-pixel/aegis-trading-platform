@@ -18,3 +18,6 @@ async def health():
     return {
         "status": "healthy"
     }
+
+
+from app.api.upload_router import router as upload_router
