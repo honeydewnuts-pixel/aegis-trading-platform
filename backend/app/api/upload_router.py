@@ -2,14 +2,17 @@
 Project: AEGIS
 Company: Honeydewnuts Nigerian Limited
 
-Upload API
+Purpose:
+Image Upload and Image Processing API
 """
 
 from fastapi import APIRouter
-from fastapi import UploadFile
 from fastapi import File
 from fastapi import HTTPException
+from fastapi import UploadFile
 
+from app.schemas.image_processing import ImageInformationResponse
+from app.services.image_processing_service import ImageProcessingService
 from app.services.upload_service import UploadService
 
 router = APIRouter(
@@ -17,16 +20,16 @@ router = APIRouter(
     tags=["Image Upload"]
 )
 
-service = UploadService()
+upload_service = UploadService()
+image_service = ImageProcessingService()
 
 
-@router.post("/", response_model=None)
+@router.post("/")
 async def upload_image(
     file: UploadFile = File(...)
 ):
 
     if not file.content_type.startswith("image/"):
-
         raise HTTPException(
             status_code=400,
             detail="Only image files are accepted."
@@ -34,13 +37,50 @@ async def upload_image(
 
     try:
 
-        metadata = await service.save_image(file)
+        metadata = await upload_service.save_image(file)
 
         return metadata.model_dump()
 
-    except ValueError as ex:
+    except ValueError as error:
 
         raise HTTPException(
             status_code=400,
-            detail=str(ex)
+            detail=str(error)
+        )
+
+
+@router.get(
+    "/info/{filename}",
+    response_model=ImageInformationResponse
+)
+async def image_information(filename: str):
+
+    image_path = f"uploads/{filename}"
+
+    try:
+
+        image = image_service.load_image(image_path)
+
+        information = image_service.image_information(image)
+
+        return ImageInformationResponse(
+            filename=filename,
+            width=information["width"],
+            height=information["height"],
+            channels=information["channels"],
+            status="success"
+        )
+
+    except FileNotFoundError:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Image not found."
+        )
+
+    except Exception as error:
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
         )
