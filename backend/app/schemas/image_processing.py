@@ -3,14 +3,15 @@ Project: AEGIS
 Company: Honeydewnuts Nigerian Limited
 
 Purpose:
-Schema returned after image preprocessing.
+Schemas for image processing responses.
 """
 
 from pydantic import BaseModel
 
 
-class ImageProcessingResponse(BaseModel):
-
+class ImageInformationResponse(BaseModel):
+    filename: str
+    width: int
+    height: int
+    channels: int
     status: str
-
-    image: dict
