@@ -173,6 +173,68 @@ class CredentialVaultService:
 
     # ---------------------------------------------------------
 
+    def get_credentials_by_account(
+        self,
+        account_id: str,
+    ) -> dict[str, Any] | None:
+        """
+        Retrieve broker credentials using the broker account ID.
+
+        Why this method exists
+        ----------------------
+        The BrokerConnectionService works with broker account IDs
+        rather than internal vault credential IDs.
+
+        The vault therefore performs the mapping from account_id
+        to the corresponding credential record.
+
+        Returns
+        -------
+        dict | None
+
+        The returned dictionary is intentionally identical to
+        get_credentials() so both lookup methods expose the same
+        public contract.
+
+        Returns None if the account cannot be found.
+        """
+
+        for _, record in self._vault.items():
+
+            if record["account_id"] != account_id:
+                continue
+
+            self.logger.info(
+                "Credential accessed by account_id: %s",
+                account_id,
+            )
+
+            if not record["execution_enabled"]:
+
+                return {
+                    "broker_name": record["broker_name"],
+                    "server": record["server"],
+                    "account_id": record["account_id"],
+                    "execution_enabled": False,
+                }
+
+            password = self._decrypt(
+                record["nonce"],
+                record["ciphertext"],
+            )
+
+            return {
+                "broker_name": record["broker_name"],
+                "server": record["server"],
+                "account_id": record["account_id"],
+                "trading_password": password,
+                "execution_enabled": True,
+            }
+
+        return None
+
+    # ---------------------------------------------------------
+
     def rotate_credentials(
         self,
         credential_id: str,
