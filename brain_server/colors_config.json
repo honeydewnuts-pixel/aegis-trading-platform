@@ -1,1 +1,136 @@
+{
+  "config_version": "AEGIS_VISION_1.0",
+  "description": "Color configuration for the AEGIS Mobile MT5 Indicator Rulebook Brain. Generated from the standardized 10-image Mobile MT5 template. All colors are stored in RGB with HSV tolerances to accommodate device brightness, compression artifacts, and minor rendering differences.",
 
+  "image_profile": {
+    "source": "AEGIS Standard Mobile MT5 Template",
+    "validated_images": 10,
+    "timeframe": "M1",
+    "theme": "Dark",
+    "roi_layout": "Fixed",
+    "template": "AEGIS Mobile MT5 Standard Indicator Template"
+  },
+
+  "color_space": "HSV",
+
+  "global_tolerance": {
+    "hue": 10,
+    "saturation": 45,
+    "value": 45
+  },
+
+  "roi": {
+    "price_panel": {
+      "top_percent": 0.00,
+      "bottom_percent": 0.61
+    },
+    "indicator_panel": {
+      "top_percent": 0.61,
+      "bottom_percent": 1.00
+    }
+  },
+
+  "indicators": {
+
+    "#1": {
+      "name": "Bands34",
+      "description": "Stationary Bollinger Bands (Period 34, Deviation 1.618)",
+      "color_name": "White",
+      "rgb": [245, 245, 245],
+      "hsv_tolerance": {
+        "hue": 12,
+        "saturation": 35,
+        "value": 40
+      }
+    },
+
+    "#2": {
+      "name": "Bands17",
+      "description": "Motional Bollinger Bands (Period 17, Deviation 2.618)",
+      "color_name": "BrightGreen",
+      "rgb": [0, 255, 0],
+      "hsv_tolerance": {
+        "hue": 15,
+        "saturation": 50,
+        "value": 45
+      }
+    },
+
+    "#3": {
+      "name": "WilliamsR60",
+      "description": "Williams %R (60)",
+      "color_name": "Orange",
+      "rgb": [255, 165, 0],
+      "hsv_tolerance": {
+        "hue": 15,
+        "saturation": 55,
+        "value": 45
+      }
+    },
+
+    "#4": {
+      "name": "MA7",
+      "description": "Moving Average 7",
+      "color_name": "Magenta",
+      "rgb": [220, 0, 255],
+      "hsv_tolerance": {
+        "hue": 14,
+        "saturation": 50,
+        "value": 45
+      }
+    },
+
+    "#5": {
+      "name": "CCI6",
+      "description": "Commodity Channel Index (6)",
+      "color_name": "Red",
+      "rgb": [255, 0, 0],
+      "hsv_tolerance": {
+        "hue": 12,
+        "saturation": 55,
+        "value": 45
+      }
+    },
+
+    "#6": {
+      "name": "RSI9",
+      "description": "Relative Strength Index (9)",
+      "color_name": "Cyan",
+      "rgb": [70, 220, 255],
+      "hsv_tolerance": {
+        "hue": 15,
+        "saturation": 50,
+        "value": 45
+      }
+    }
+  },
+
+  "cross_detection": {
+    "primary_signal": "#2(2M)",
+    "reference_upper": "#1(1U)",
+    "reference_middle": "#1(1M)",
+    "reference_lower": "#1(1L)",
+
+    "signals": [
+      "#2(2M)_CROSSED_ABOVE_#1(1U)",
+      "#2(2M)_CROSSED_BELOW_#1(1L)"
+    ],
+
+    "minimum_cross_pixels": 3,
+    "minimum_confirmation_candles": 2,
+    "maximum_gap_pixels": 2
+  },
+
+  "noise_filter": {
+    "median_filter": 3,
+    "gaussian_kernel": 5,
+    "minimum_line_length": 20,
+    "minimum_contour_area": 12
+  },
+
+  "output": {
+    "coordinate_system": "Pixel",
+    "extract_per_candle": true,
+    "return_confidence": true
+  }
+}
